@@ -3,4 +3,6 @@
 extends _BASE_
 
 func compinit():
-	compname = "_CLASS_".tolower()
+	compname = "_CLASS_".to_lower()
+	# expected enttype for error checking (optional)
+	enttype = ""
