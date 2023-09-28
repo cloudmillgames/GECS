@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1rrv00qkgy15"]
+
+[ext_resource type="Script" path="res://GECS/GComps.gd" id="1_pgry8"]
+
+[node name="GComps" type="Node"]
+script = ExtResource("1_pgry8")

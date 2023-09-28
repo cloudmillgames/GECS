@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cn55yqfbuhth8"]
+
+[ext_resource type="Script" path="res://GECS/GSystems.gd" id="1_ufnud"]
+
+[node name="GSystems" type="Node"]
+script = ExtResource("1_ufnud")
