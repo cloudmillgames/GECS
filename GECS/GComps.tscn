@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://GECS/GComps.gd" id="1_pgry8"]
 
-[node name="GComps" type="Node"]
+[node name="comps" type="Node"]
 script = ExtResource("1_pgry8")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://d34leke2648fi"]
+[gd_scene load_steps=17 format=3 uid="uid://d34leke2648fi"]
 
 [ext_resource type="AudioStream" uid="uid://c5koofamxtjlh" path="res://assets/sfx/slow_shoot.wav" id="1_6p6qq"]
 [ext_resource type="PackedScene" uid="uid://s3nktgc4o0ba" path="res://comps.tscn" id="1_aflm6"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://d1jfr6qn8v13e" path="res://entities/player_projectile.tscn" id="7_a6r40"]
 [ext_resource type="PackedScene" uid="uid://hwet0n70x5fr" path="res://components/audio.tscn" id="8_5qwo8"]
 [ext_resource type="Script" path="res://components/audio.gd" id="9_re764"]
+[ext_resource type="PackedScene" uid="uid://ladvkoejc4gv" path="res://components/movebounds.tscn" id="11_yp7ak"]
+[ext_resource type="Script" path="res://components/movebounds.gd" id="12_40y2m"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uvk5o"]
 
@@ -58,6 +60,10 @@ projectile = ExtResource("7_a6r40")
 script = ExtResource("9_re764")
 stream_player = NodePath("../../AudioStreamPlayer3D")
 sounds = Array[AudioStream]([ExtResource("1_6p6qq")])
+
+[node name="movebounds" parent="comps" instance=ExtResource("11_yp7ak")]
+script = ExtResource("12_40y2m")
+bounds = AABB(-8, -4, -4, 16, 8, 8)
 
 [node name="systems" type="Node" parent="."]
 
