@@ -2,6 +2,8 @@ extends GComp
 
 # Set Z to forward(-1) or backward (1), and X to right (+1) or left (-1)
 var movement:Vector3 = Vector3.ZERO
+# Rotate left and right inputs
+var turn:float = 0.0
 # set to try to fire, will be reset to false when its processed
 var trigger:bool = false
 

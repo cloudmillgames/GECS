@@ -16,7 +16,7 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ui1g"]
-albedo_color = Color(0.286275, 0.490196, 0.435294, 1)
+albedo_color = Color(0.490196, 0.27451, 0.211765, 1)
 
 [node name="start" type="Node3D"]
 
