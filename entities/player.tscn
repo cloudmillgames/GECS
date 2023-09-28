@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d34leke2648fi"]
+[gd_scene load_steps=11 format=3 uid="uid://d34leke2648fi"]
 
 [ext_resource type="PackedScene" uid="uid://s3nktgc4o0ba" path="res://comps.tscn" id="1_aflm6"]
 [ext_resource type="PackedScene" uid="uid://jiqij8g7srbd" path="res://components/player.tscn" id="2_crp3g"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://brcr78rxt5axk" path="res://components/vehicle.tscn" id="4_aml1f"]
 [ext_resource type="PackedScene" uid="uid://by0jj6bxfd1xo" path="res://components/directctrl.tscn" id="5_qt623"]
 [ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://mainsystems.tscn" id="6_7cb53"]
+[ext_resource type="PackedScene" uid="uid://ckwyjhig3ui4j" path="res://components/shake.tscn" id="6_ek48o"]
+[ext_resource type="Script" path="res://components/shake.gd" id="7_w58xv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uvk5o"]
 
@@ -30,10 +32,13 @@ shape = SubResource("BoxShape3D_iedkv")
 [node name="playercontrol" parent="comps" instance=ExtResource("3_ijc62")]
 
 [node name="vehicle" parent="comps" instance=ExtResource("4_aml1f")]
-tint_color = Color(1, 0.0705882, 1, 1)
 apply_color_to = NodePath("../../Cube")
 
 [node name="directctrl" parent="comps" instance=ExtResource("5_qt623")]
+
+[node name="shake" parent="comps" instance=ExtResource("6_ek48o")]
+script = ExtResource("7_w58xv")
+what = NodePath("../../Cube")
 
 [node name="systems" type="Node" parent="."]
 

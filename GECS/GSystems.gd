@@ -53,12 +53,8 @@ func define_system(compslist, sysname):
 				break
 		if include:
 			active_gsystems.append(sysname)
-	if len(active_gsystems) == 0:
-		print("NO ACTIVE SYSTEMS")
-	for a in active_gsystems:
-		print("ACTIVE: " + a)
 
 func _physics_process(delta):
 	var ent = get_parent().get_parent()
 	for asys in active_gsystems:
-		call(asys, ent)
+		call(asys, delta, ent)
