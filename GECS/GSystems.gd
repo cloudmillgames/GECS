@@ -24,12 +24,13 @@ var active_gsystems:Array[String] = []
 
 func _ready():
 	# Make sure there's a comps node up there
-	var comps = get_parent().get_node("../comps")
+	var ent = get_parent().get_parent()
+	var comps =ent.get_node("comps")
 	if not comps:
-		push_error("GSystems: you have a gsystems " + self.name + " that couldn't find its comps node, create that comps node ok")
+		assert(false, "GSystems: you have a gsystems " + self.name + " that couldn't find its comps node, create that comps node ok: " + ent.name)
 	comps.scan_comps()
 	if len(comps.compslist) == 0:
-		print("GSystems " + self.name + " didn't find any components in comps, so it'll do nothing")
+		push_warning("GSystems " + self.name + " didn't find any components in comps, so it'll do nothing: " + ent.name)
 	else:
 		sysinit()
 
@@ -38,11 +39,12 @@ func sysinit():
 	pass
 
 func define_system(compslist, sysname):
-	var comps = get_parent().get_node("../comps")
+	var ent = get_parent().get_parent()
+	var comps = ent.get_node("comps")
 	if sysname in gsystems:
-		push_error("GSystems: define_system() given a sysname `" + sysname + "` that's already defined, what's r we doin here?")
+		assert(false, "GSystems: define_system() given a sysname `" + sysname + "` that's already defined, what's r we doin here? " + ent.name)
 	elif len(compslist) == 0:
-		push_error("GSystems: define_system() for `" + sysname + "` given compslist empty.. hollow.. void..")
+		assert(false, "GSystems: define_system() for `" + sysname + "` given compslist empty.. hollow.. void.." + ent.name)
 	else:
 		gsystems[sysname] = compslist
 		# Simply iterate on all compslist, findout if we have them all from comps, add system to active list if we do
@@ -58,3 +60,7 @@ func _physics_process(delta):
 	var ent = get_parent().get_parent()
 	for asys in active_gsystems:
 		call(asys, delta, ent)
+
+# Lazyness func
+func get_component(ent:Node, compname:String):
+	return ent.get_node("comps/" + compname)

@@ -7,6 +7,8 @@ class_name GComp
 # Can export properties to allow them to be modifiable in editor
 
 var compname:String = "unnamed"
+# if set, GComps scan checks entity node type to make sure it's what's expected
+var enttype:String = ""
 
 func _ready():
 	# this is a duplicate call, GComps calls compinit() if name is unnamed
