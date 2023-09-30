@@ -59,11 +59,30 @@ func scan_comps():
 					assert(ent.is_class(c.enttype), name + "(GSystems): entity `" + str(ent) + "` is not valid for `" + c.compname + "` component: " + ent.name + " (expected type `" + c.enttype + "`)")
 				compslist.append(c.compname)
 		else:
-			assert(false, name + "(GSystems): wow child " + c.name + " is not GComp, I need to speak to your manager, extends GComp pls: " + ent.name)
-			bad_children += 1
+			if c.get_child_count(true) == 0 and not c.name.begins_with("Node"):
+				push_warning(name + "(GSystems): child " + c.name + " is a named empty Node, it will be considered a tag.")
+				compslist.append(c.name)
+			else:
+				assert(false, name + "(GSystems): wow child " + c.name + " is not GComp, I need to speak to your manager, extends GComp pls: " + ent.name)
+				bad_children += 1
 		
 	if bad_children > 0:
 		push_error(name + "(GSystems): " + str(bad_children) + " <- this many children are bad, such parenting: " + ent.name)
+
+func refresh_active_systems():
+	active_gsystems = []
+	for sysname in gsystems:
+		if is_system_active(gsystems[sysname]):
+			active_gsystems.append(sysname)
+
+func is_system_active(sysname:String):
+	var compnames = gsystems[sysname]
+	var active = true
+	for c in compnames:
+		if not compslist.has(c):
+			active = false
+			break
+	return active
 
 # Where define_system() should be called by systems
 func sysinit():
@@ -78,13 +97,7 @@ func define_system(compnames, sysname):
 		assert(false,  name + "(GSystems): define_system() for `" + sysname + "` given compslist empty.. hollow.. void.." + ent.name)
 	else:
 		gsystems[sysname] = compnames
-		# Simply iterate on all compslist, findout if we have them all from comps, add system to active list if we do
-		var include = true
-		for c in compnames:
-			if not compslist.has(c):
-				include = false
-				break
-		if include:
+		if is_system_active(sysname):
 			active_gsystems.append(sysname)
 
 func _physics_process(delta):
@@ -92,14 +105,30 @@ func _physics_process(delta):
 	for asys in active_gsystems:
 		call(asys, delta, ent)
 
+# Gets component in this entity
 func get_comp(compname:String):
 	return get_node(compname)
 
+# Gets component in given entity from the same systems scene (by name)
+func get_ent_comp(ent:Node, compname:String):
+	return ent.get_node(NodePath(name)).get_node(compname)
+
+func has_comp(compname:String):
+	return compname in compslist
+
+# Tag comps are supported, but remember we have to refresh active systems after
+func add_comp(compname:String):
+	compslist.append(compname)
+
 # Use this from system funcs instead of get_node(), it corrects relative paths to be one up instead of two up
 func get_comp_node(path:NodePath):
-	assert(not path.is_empty())
+	assert(not path.is_empty(), "Given path is empty, did you forget to initialize it? " + str(name))
 	if not path.is_absolute() and path.get_name_count() > 2:
 		# "../../*" to "../*"
 		var new_path = path.get_concatenated_names()
 		assert(new_path.begins_with("../../"), "get_comp_node() given incorrect relative nodepath: " + str(path))
 		return get_node(new_path.substr(3) + path.get_concatenated_subnames())
+
+# Destroys entity scene effectively removing self
+func destruct():
+	get_parent().queue_free()

@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://8wvs75s87cod"]
+[gd_scene load_steps=7 format=3 uid="uid://8wvs75s87cod"]
 
 [ext_resource type="PackedScene" uid="uid://d34leke2648fi" path="res://entities/player.tscn" id="1_u3djk"]
+[ext_resource type="PackedScene" uid="uid://dbjnht65xad6h" path="res://entities/enemy_spawner.tscn" id="2_u0udi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kbjq8"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -37,3 +38,5 @@ size = Vector3(100, 1, 100)
 material = SubResource("StandardMaterial3D_5ui1g")
 
 [node name="Player" parent="." instance=ExtResource("1_u3djk")]
+
+[node name="EnemySpawner" parent="." instance=ExtResource("2_u0udi")]

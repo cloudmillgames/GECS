@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://dq3pq7r4vlcq2"]
+[gd_scene load_steps=9 format=3 uid="uid://dq3pq7r4vlcq2"]
 
 [ext_resource type="PackedScene" uid="uid://dh7ly7j5rge8q" path="res://components/cmdctrl.tscn" id="2_kmacl"]
-[ext_resource type="Script" path="res://components/cmdctrl.gd" id="3_ar1nw"]
 [ext_resource type="PackedScene" uid="uid://brcr78rxt5axk" path="res://components/vehicle.tscn" id="4_iqgie"]
 [ext_resource type="PackedScene" uid="uid://cagyrcotru3p6" path="res://components/killbounds.tscn" id="5_t2g5e"]
 [ext_resource type="PackedScene" uid="uid://c5ckeou58qnb1" path="res://components/turret.tscn" id="6_ry03l"]
@@ -13,7 +12,7 @@ albedo_color = Color(0, 0.305882, 1, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_m6ijd"]
 material = SubResource("StandardMaterial3D_glio0")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_8a0cn"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_b32iv"]
 radius = 0.6
 
 [node name="enemy" type="CharacterBody3D"]
@@ -24,15 +23,14 @@ mesh = SubResource("SphereMesh_m6ijd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("SphereShape3D_8a0cn")
+shape = SubResource("SphereShape3D_b32iv")
 
 [node name="mainsystems" parent="." instance=ExtResource("7_kaqfd")]
 
 [node name="cmdctrl" parent="mainsystems" instance=ExtResource("2_kmacl")]
-script = ExtResource("3_ar1nw")
 
 [node name="vehicle" parent="mainsystems" instance=ExtResource("4_iqgie")]
 
-[node name="killbounds" parent="mainsystems" instance=ExtResource("5_t2g5e")]
-
 [node name="turret" parent="mainsystems" instance=ExtResource("6_ry03l")]
+
+[node name="killbounds" parent="mainsystems" instance=ExtResource("5_t2g5e")]

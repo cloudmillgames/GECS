@@ -1,12 +1,15 @@
 extends GSystems
 
 func sysinit():
-	define_system(["vehicle", "shake"], "vehicle_shake")
-	define_system(["vehicle"], "vehicle_tint")
-	define_system(["playercontrol", "directctrl"], "player_controls")
-	define_system(["directctrl", "vehicle", "movebounds"], "vehicle_direct_control")
-	define_system(["turret", "directctrl", "audio"], "turret_direct_control")
-	define_system(["killbounds"], "kill_bounds")
+	define_system(["vehicle", "shake"], 					"vehicle_shake")
+	define_system(["vehicle"], 								"vehicle_tint")
+	define_system(["playercontrol", "directctrl"], 			"player_controls")
+	define_system(["directctrl", "vehicle", "movebounds"], 	"vehicle_direct_control")
+	define_system(["turret", "directctrl", "audio"], 		"turret_direct_control")
+	define_system(["killbounds"], 							"kill_bounds")
+	define_system(["enemy_spawner"],						"spawn_enemy")
+	define_system(["cmdctrl", "vehicle"],					"vehicle_command_control")
+	define_system(["turret", "turret_trigger"],				"turret_cmdctrl")
 
 # Shake vehicle to indicate it's a vehicle
 # compslist: vehicle, shake
@@ -109,3 +112,80 @@ func kill_bounds(tdelta, ent):
 	var pos = ent.global_position
 	if pos.x > bounds.max_corner.x or pos.y > bounds.max_corner.y or pos.z > bounds.max_corner.z or pos.x < bounds.min_corner.x or pos.y < bounds.min_corner.y or pos.z < bounds.min_corner.z:
 		ent.queue_free()
+
+# compslist: enemy_spawner
+func spawn_enemy(tdelta, ent):
+	var es = get_comp("enemy_spawner")
+	if es._timer > 0:
+		es._timer = max(es._timer - tdelta, 0)
+	else:
+		var path_follow = get_comp_node(es.spawn_follow_path) as PathFollow3D
+		path_follow.progress_ratio = randf()
+		
+		var pos_start = path_follow.position
+		path_follow.progress_ratio = fmod(path_follow.progress_ratio + 0.5, 1.0)
+		var pos_end = path_follow.position
+		
+		var enemy = es.enemy_scene.instantiate() as Node3D
+		enemy.position = pos_start
+		get_parent().get_parent().add_child(enemy)
+		
+		var cmd = get_ent_comp(enemy, "cmdctrl")
+		var chance = randf()
+		if chance <= es.chance_attack or true:
+			var halfway = pos_end - pos_start
+			var alpha = 0.2 + 0.6 * randf() # between 20% and 80% of the way
+			halfway = pos_start + (halfway.normalized() * halfway.length() * alpha)
+			cmd.queue_moveto(halfway)
+			cmd.queue_halt(0.5)
+			cmd.queue_fire()
+		cmd.queue_moveto(pos_end)
+		cmd.queue_destruct()
+		
+		es._timer = es.spawn_duration_range.x + ((es.spawn_duration_range.y - es.spawn_duration_range.x) * randf())
+
+# compslist: command_control, vehicle
+func vehicle_command_control(tdelta, ent):
+	var cc = get_comp("cmdctrl")
+	if cc._halt_timer > 0:
+		cc._halt_timer = max(cc._halt_timer - tdelta, 0)
+	else:
+		if cc._current_cmd == cc.CMD_TYPE.NONE:
+			if len(cc.cmd_queue) > 0:
+				cc._current_cmd = cc.cmd_queue.pop_front()
+				cc._current_data = cc.data_queue.pop_front()
+		else:
+			match cc._current_cmd:
+				cc.CMD_TYPE.MOVE_TO:
+					var vehicle = get_comp("vehicle")
+					var pos_cur = ent.position
+					var pos_end = cc._current_data
+					var dir = pos_end - pos_cur
+					var dist = dir.length()
+					dir = dir / dist
+					#if dir:
+					if dist > 0.2:
+						ent.velocity.x = dir.x * vehicle.speed
+						ent.velocity.z = dir.z * vehicle.speed
+					else:
+						ent.velocity.x = move_toward(ent.velocity.x, 0, vehicle.speed)
+						ent.velocity.z = move_toward(ent.velocity.z, 0, vehicle.speed)
+						if ent.velocity.x < 0.01:
+							cc._current_cmd = cc.CMD_TYPE.NONE
+					ent.move_and_slide()
+				cc.CMD_TYPE.HALT:
+					cc._halt_timer = cc._current_data
+					assert(cc._halt_timer > 0.0)
+					cc._current_cmd = cc.CMD_TYPE.NONE
+				cc.CMD_TYPE.FIRE:
+					if has_comp("turret"):
+						add_comp("turret_trigger")
+					cc._current_cmd = cc.CMD_TYPE.NONE
+				cc.CMD_TYPE.DESTRUCT:
+					destruct()
+					cc._current_cmd = cc.CMD_TYPE.NONE
+
+# TODO: when turret_trigger tag is added, we fire and then remove turret_trigger
+# compslist: turret, turret_trigger
+func turret_cmdctrl(tdelta, ent):
+	pass

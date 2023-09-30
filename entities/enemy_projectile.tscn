@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://byxg8je7to06r"]
+
+[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="1_381bc"]
+[ext_resource type="PackedScene" uid="uid://cagyrcotru3p6" path="res://components/killbounds.tscn" id="2_t0w2x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7rg0e"]
+emission_enabled = true
+emission = Color(0.917647, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7x6px"]
+material = SubResource("StandardMaterial3D_7rg0e")
+radius = 0.4
+height = 0.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r2d01"]
+size = Vector3(0.2, 0.2, 0.5)
+
+[node name="EnemyProjectile" type="RigidBody3D"]
+collision_mask = 2
+gravity_scale = 0.0
+continuous_cd = true
+contact_monitor = true
+can_sleep = false
+lock_rotation = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_7x6px")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_r2d01")
+
+[node name="mainsystems" parent="." instance=ExtResource("1_381bc")]
+
+[node name="killbounds" parent="mainsystems" instance=ExtResource("2_t0w2x")]

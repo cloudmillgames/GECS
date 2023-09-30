@@ -1,3 +1,26 @@
-[gd_scene format=3 uid="uid://dbjnht65xad6h"]
+[gd_scene load_steps=5 format=3 uid="uid://dbjnht65xad6h"]
+
+[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="1_nu37e"]
+[ext_resource type="PackedScene" uid="uid://cratar4eh7jv0" path="res://components/enemy_spawner.tscn" id="2_42kqp"]
+[ext_resource type="Script" path="res://components/enemy_spawner.gd" id="3_ow162"]
+
+[sub_resource type="Curve3D" id="Curve3D_1oc4x"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 15, 0, 10, 0, 0, 0, 0, 0, 0, 15, 0, -10, 0, 0, 0, 0, 0, 0, -15, 0, -10, 0, 0, 0, 0, 0, 0, -15, 0, 10, 0, 0, 0, 0, 0, 0, 15, 0, 10),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [node name="EnemySpawner" type="Node3D"]
+
+[node name="mainsystems" parent="." instance=ExtResource("1_nu37e")]
+
+[node name="enemy_spawner" parent="mainsystems" instance=ExtResource("2_42kqp")]
+script = ExtResource("3_ow162")
+spawn_follow_path = NodePath("../../Path3D/PathFollow3D")
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_1oc4x")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)

@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://dh7ly7j5rge8q"]
+[gd_scene load_steps=2 format=3 uid="uid://dh7ly7j5rge8q"]
+
+[ext_resource type="Script" path="res://components/cmdctrl.gd" id="1_b2gy8"]
 
 [node name="cmdctrl" type="Node"]
+script = ExtResource("1_b2gy8")

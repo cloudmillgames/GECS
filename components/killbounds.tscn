@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://cagyrcotru3p6"]
+[gd_scene load_steps=2 format=3 uid="uid://cagyrcotru3p6"]
+
+[ext_resource type="Script" path="res://components/killbounds.gd" id="1_0ge6j"]
 
 [node name="killbounds" type="Node"]
+script = ExtResource("1_0ge6j")
