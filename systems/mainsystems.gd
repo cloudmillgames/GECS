@@ -12,7 +12,7 @@ func sysinit():
 # compslist: vehicle, shake
 func vehicle_shake(tdelta, ent):
 	# Shake the cube
-	var shake = ent.get_node("comps/shake")
+	var shake = get_comp("comps/shake")
 	if shake.what:
 		var r = [randf() * shake.strength, randf() * shake.strength, randf() * shake.strength]
 		var what:Node3D = get_node(shake.what) as Node3D
@@ -22,7 +22,7 @@ func vehicle_shake(tdelta, ent):
 # Mchackson says, since this is a single component system you can just move it to _process_physics() of vehicle
 # compslist: vehicle
 func vehicle_tint(tdelta, ent):
-	var vehicle = ent.get_node("comps/vehicle")
+	var vehicle = get_comp("vehicle")
 	var apply_to = vehicle.apply_color_to
 	if apply_to and vehicle.tint_color != Color.WHITE:
 		# comps/vehicle is two levels in, apply_to starts with "../../" which means we could refs it from here (hacky I know)
@@ -32,7 +32,7 @@ func vehicle_tint(tdelta, ent):
 
 # compslist: playercontrol, directctrl
 func player_controls(tdelta, ent):
-	var directctrl = get_component(ent, "directctrl")
+	var directctrl = get_comp("directctrl")
 	directctrl.movement = Vector3.ZERO
 	directctrl.turn = 0.0
 	if Input.is_action_pressed("move_up"):
@@ -52,9 +52,9 @@ func player_controls(tdelta, ent):
 
 # compslist: directctrl, vehicle, movebounds
 func vehicle_direct_control(tdelta, ent):
-	var directctrl = get_component(ent, "directctrl")
-	var vehicle = get_component(ent, "vehicle")
-	var bounds = get_component(ent, "movebounds").bounds as AABB
+	var directctrl = get_comp("directctrl")
+	var vehicle = get_comp("vehicle")
+	var bounds = get_comp("movebounds").bounds as AABB
 	
 	if directctrl.turn != 0:
 		ent.rotate_y(-directctrl.turn * vehicle.angular_speed * tdelta)
@@ -85,19 +85,19 @@ func vehicle_direct_control(tdelta, ent):
 
 # compslist: directctrl, turret, audio
 func turret_direct_control(tdelta, ent):
-	var turret = get_component(ent, "turret")
-	var directctrl = get_component(ent, "directctrl")
+	var turret = get_comp("turret")
+	var directctrl = get_comp("directctrl")
 	if turret._timer > 0:
 		if directctrl.trigger:
 			directctrl.trigger = false
 		turret._timer -= tdelta
 	elif directctrl.trigger:
-		var audio = get_component(ent, "audio")
-		var player = get_node(audio.stream_player) as AudioStreamPlayer3D
+		var audio = get_comp("audio")
+		var player = get_comp_node(audio.stream_player)
 		player.stream = audio.sounds[0]
 		player.play()
 		var pr:Node3D = turret.projectile.instantiate()
-		var fm:Marker3D = get_node(turret.fire_marker) as Marker3D
+		var fm:Marker3D = get_comp_node(turret.fire_marker) as Marker3D
 		pr.transform = fm.global_transform
 		pr.linear_velocity = -turret.speed * pr.transform.basis.z 
 		get_tree().root.add_child(pr)
@@ -105,7 +105,7 @@ func turret_direct_control(tdelta, ent):
 
 # compslist: killbounds
 func kill_bounds(tdelta, ent):
-	var bounds = get_component(ent, "killbounds")
+	var bounds = get_comp("killbounds")
 	var pos = ent.global_position
 	if pos.x > bounds.max_corner.x or pos.y > bounds.max_corner.y or pos.z > bounds.max_corner.z or pos.x < bounds.min_corner.x or pos.y < bounds.min_corner.y or pos.z < bounds.min_corner.z:
 		ent.queue_free()

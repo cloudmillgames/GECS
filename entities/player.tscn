@@ -1,12 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://d34leke2648fi"]
+[gd_scene load_steps=16 format=3 uid="uid://d34leke2648fi"]
 
 [ext_resource type="AudioStream" uid="uid://c5koofamxtjlh" path="res://assets/sfx/slow_shoot.wav" id="1_6p6qq"]
-[ext_resource type="PackedScene" uid="uid://s3nktgc4o0ba" path="res://comps.tscn" id="1_aflm6"]
 [ext_resource type="PackedScene" uid="uid://jiqij8g7srbd" path="res://components/player.tscn" id="2_crp3g"]
 [ext_resource type="PackedScene" uid="uid://c74rdk6ryyhr4" path="res://components/playercontrol.tscn" id="3_ijc62"]
 [ext_resource type="PackedScene" uid="uid://brcr78rxt5axk" path="res://components/vehicle.tscn" id="4_aml1f"]
 [ext_resource type="PackedScene" uid="uid://by0jj6bxfd1xo" path="res://components/directctrl.tscn" id="5_qt623"]
-[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://mainsystems.tscn" id="6_7cb53"]
+[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="6_7cb53"]
 [ext_resource type="PackedScene" uid="uid://c5ckeou58qnb1" path="res://components/turret.tscn" id="6_frqv0"]
 [ext_resource type="PackedScene" uid="uid://d1jfr6qn8v13e" path="res://entities/player_projectile.tscn" id="7_a6r40"]
 [ext_resource type="PackedScene" uid="uid://hwet0n70x5fr" path="res://components/audio.tscn" id="8_5qwo8"]
@@ -41,30 +40,26 @@ stream = ExtResource("1_6p6qq")
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
 
-[node name="comps" parent="." instance=ExtResource("1_aflm6")]
+[node name="mainsystems" parent="." instance=ExtResource("6_7cb53")]
 
-[node name="player" parent="comps" instance=ExtResource("2_crp3g")]
+[node name="player" parent="mainsystems" instance=ExtResource("2_crp3g")]
 
-[node name="playercontrol" parent="comps" instance=ExtResource("3_ijc62")]
+[node name="playercontrol" parent="mainsystems" instance=ExtResource("3_ijc62")]
 
-[node name="vehicle" parent="comps" instance=ExtResource("4_aml1f")]
+[node name="vehicle" parent="mainsystems" instance=ExtResource("4_aml1f")]
 apply_color_to = NodePath("../../Cube")
 
-[node name="directctrl" parent="comps" instance=ExtResource("5_qt623")]
+[node name="directctrl" parent="mainsystems" instance=ExtResource("5_qt623")]
 
-[node name="turret" parent="comps" instance=ExtResource("6_frqv0")]
+[node name="turret" parent="mainsystems" instance=ExtResource("6_frqv0")]
 fire_marker = NodePath("../../Marker3D")
 projectile = ExtResource("7_a6r40")
 
-[node name="audio" parent="comps" instance=ExtResource("8_5qwo8")]
+[node name="audio" parent="mainsystems" instance=ExtResource("8_5qwo8")]
 script = ExtResource("9_re764")
 stream_player = NodePath("../../AudioStreamPlayer3D")
 sounds = Array[AudioStream]([ExtResource("1_6p6qq")])
 
-[node name="movebounds" parent="comps" instance=ExtResource("11_yp7ak")]
+[node name="movebounds" parent="mainsystems" instance=ExtResource("11_yp7ak")]
 script = ExtResource("12_40y2m")
 bounds = AABB(-8, -4, -4, 16, 8, 8)
-
-[node name="systems" type="Node" parent="."]
-
-[node name="mainsystems" parent="systems" instance=ExtResource("6_7cb53")]

@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://d1jfr6qn8v13e"]
+[gd_scene load_steps=7 format=3 uid="uid://d1jfr6qn8v13e"]
 
-[ext_resource type="PackedScene" uid="uid://d1rrv00qkgy15" path="res://GECS/GComps.tscn" id="1_t2g5t"]
-[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://mainsystems.tscn" id="2_1ffup"]
+[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="1_0ehi1"]
 [ext_resource type="PackedScene" uid="uid://cagyrcotru3p6" path="res://components/killbounds.tscn" id="2_150j5"]
 [ext_resource type="Script" path="res://components/killbounds.gd" id="3_8b2ou"]
 
@@ -32,11 +31,7 @@ skeleton = NodePath("")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_r2d01")
 
-[node name="comps" parent="." instance=ExtResource("1_t2g5t")]
+[node name="mainsystems" parent="." instance=ExtResource("1_0ehi1")]
 
-[node name="killbounds" parent="comps" instance=ExtResource("2_150j5")]
+[node name="killbounds" parent="mainsystems" instance=ExtResource("2_150j5")]
 script = ExtResource("3_8b2ou")
-
-[node name="systems" type="Node" parent="."]
-
-[node name="mainsystems" parent="systems" instance=ExtResource("2_1ffup")]
