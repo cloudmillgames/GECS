@@ -54,3 +54,5 @@ stream_player = NodePath("../../AudioStreamPlayer3D")
 [node name="health" parent="mainsystems" instance=ExtResource("8_aukd2")]
 
 [node name="killable" parent="mainsystems" instance=ExtResource("10_0rcmg")]
+
+[node name="enemy" type="Node" parent="mainsystems"]

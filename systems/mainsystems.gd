@@ -238,6 +238,9 @@ func projectile_collision(tdelta, ent):
 			var health = ent_get_comp(other, "health")
 			var proj = get_comp("projectile")
 			health.hp -= proj.damage
+			if ent_has_comp(other, "vehicle") and ent_has_comp(other, "enemy"):
+				var vehicle = ent_get_comp(other, "vehicle")
+				GameSession.score += vehicle.value
 		else:
 			print("projectile_collision (mainsystems): killed `%s` cause it has no health comp" % other.name)
 			destroy(other)
