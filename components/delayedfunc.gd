@@ -22,3 +22,4 @@ func _physics_process(delta):
 			object.call(func_name, func_arg)
 		else:
 			object.call(func_name)
+		get_parent().destruct()

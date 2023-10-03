@@ -1,5 +1,10 @@
 extends GSystems
 
+var PSDelayedFunc:PackedScene = preload("res://components/delayedfunc.tscn")
+var PSTurretTarget:PackedScene = preload("res://components/turret_target.tscn")
+var PSProjectileImpact:PackedScene = preload("res://entities/projectile_impact.tscn")
+var PSVehicleExplode:PackedScene = preload("res://entities/vehicle_explode.tscn")
+
 func sysinit():
 	define_system(["shake"], 								"thing_shake")
 	define_system(["vehicle"], 								"vehicle_tint")
@@ -15,15 +20,17 @@ func sysinit():
 	define_system(["projectile", "collisionevent"],			"projectile_collision")
 	define_singleton_system("lose_condition")
 
-var PSTurretTarget:PackedScene = preload("res://components/turret_target.tscn")
-var PSProjectileImpact:PackedScene = preload("res://entities/projectile_impact.tscn")
-var PSVehicleExplode:PackedScene = preload("res://entities/vehicle_explode.tscn")
-
 func lose_condition(tdelta):
 	var player = get_first_tagged_ent("player")
 	if player == null and not GameSession.gameover:
 		GameSession.gameover = true
-		print("GAME OVER")
+		print("GAMEOVER")
+		var delayedfunc = PSDelayedFunc.instantiate()
+		delayedfunc.delay = 2
+		delayedfunc.object = GECS
+		delayedfunc.func_name = "change_scene_to"
+		delayedfunc.func_arg = "res://scenes/game_over_scene.tscn"
+		GECS.spawn_ent_comp("res://systems/mainsystems.tscn", delayedfunc)
 
 func run_escape_quitter(tdelta, ent):
 	if Input.is_action_just_released("ui_cancel"):

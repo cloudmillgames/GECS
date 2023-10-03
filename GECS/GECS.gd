@@ -72,3 +72,19 @@ func _physics_process(delta):
 			invalids.append(i)
 	for i in invalids:
 		instances.erase(i)
+
+func change_scene_to(scene_file:String):
+	get_tree().change_scene_to_file(scene_file)
+
+# Spawns a Node3D entity in root then adds given component to it
+# - gsystems_path is the path to tscn of the gsystems to use, this is required to avoid cyclic dependency
+# - comp is the instantiated GComp
+# Retrusn the entity that was instantiated
+func spawn_ent_comp(gsystems_path:String, comp:GComp)->Node3D:
+	var ent = Node3D.new()
+	var gsys_ps:PackedScene = load(gsystems_path)
+	var gsys = gsys_ps.instantiate()
+	gsys.add_child(comp)
+	ent.add_child(gsys)
+	get_tree().root.add_child(ent)
+	return ent

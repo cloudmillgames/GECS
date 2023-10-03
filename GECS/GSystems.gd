@@ -23,6 +23,8 @@ class_name GSystems
 var active_gsystems:Array[String] = []
 # list of comps names found
 var compslist:Array[String] = []
+# Used to duplicate this GSystems when spawning new entities
+var self_packed_scene:PackedScene
 
 func _ready():
 	# Make sure there's a comps node up there

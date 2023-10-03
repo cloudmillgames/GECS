@@ -1,20 +1,20 @@
-[gd_scene load_steps=9 format=3 uid="uid://cc8261ur80461"]
+[gd_scene load_steps=9 format=3 uid="uid://drafp87k6d1kp"]
 
 [ext_resource type="Script" path="res://entities/vehicle_explode.gd" id="1_m75a1"]
 [ext_resource type="AudioStream" uid="uid://crclje12nla4q" path="res://assets/sfx/explode.wav" id="1_ufpy4"]
-[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="2_28j3i"]
-[ext_resource type="PackedScene" uid="uid://ckwyjhig3ui4j" path="res://components/shake.tscn" id="3_cdjsa"]
+[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="2_2yu5v"]
+[ext_resource type="PackedScene" uid="uid://ckwyjhig3ui4j" path="res://components/shake.tscn" id="3_ldwbw"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rnrau"]
-albedo_color = Color(1, 0.403922, 0.164706, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tnkf6"]
+albedo_color = Color(1, 0.396078, 0.172549, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_r0ae1"]
-material = SubResource("StandardMaterial3D_rnrau")
+[sub_resource type="SphereMesh" id="SphereMesh_d21ph"]
+material = SubResource("StandardMaterial3D_tnkf6")
 
-[sub_resource type="Animation" id="Animation_47dfn"]
+[sub_resource type="Animation" id="Animation_lrixc"]
 resource_name = "explode"
 length = 0.15
-step = 0.15
+step = 0.05
 tracks/0/type = "scale_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -23,30 +23,28 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0.1, 0.1, 0.1, 0.15, 1, 2, 2, 2)
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_a24yx"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bpt0g"]
 _data = {
-"explode": SubResource("Animation_47dfn")
+"explode": SubResource("Animation_lrixc")
 }
 
 [node name="vehicle_explode" type="Node3D"]
 script = ExtResource("1_m75a1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
-mesh = SubResource("SphereMesh_r0ae1")
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+mesh = SubResource("SphereMesh_d21ph")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "explode"
 libraries = {
-"": SubResource("AnimationLibrary_a24yx")
+"": SubResource("AnimationLibrary_bpt0g")
 }
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("1_ufpy4")
 autoplay = true
 
-[node name="mainsystems" parent="." instance=ExtResource("2_28j3i")]
+[node name="mainsystems" parent="." instance=ExtResource("2_2yu5v")]
 
-[node name="shake" parent="mainsystems" instance=ExtResource("3_cdjsa")]
-what = NodePath("../..")
-strength = 0.1
+[node name="shake" parent="mainsystems" instance=ExtResource("3_ldwbw")]
