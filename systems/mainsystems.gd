@@ -183,9 +183,8 @@ func vehicle_command_control(tdelta, ent):
 						add_tag_comp("turret_trigger")
 						if not cc._current_data.is_empty():
 							var tgt = get_first_tagged_ent(cc._current_data)
-							var tt = PSTurretTarget.instantiate()
+							var tt = add_comp(PSTurretTarget, true)
 							tt.target = tgt
-							add_comp(tt)
 					cc._current_cmd = cc.CMD_TYPE.NONE
 				cc.CMD_TYPE.DESTRUCT:
 					destruct()

@@ -141,8 +141,9 @@ func add_tag_comp(compname:String):
 		ent.add_to_group(GPREFIX + compname)
 		refresh_active_systems()
 
-# Adds an instanced component, if replace is true and component is already in entity, replaces existing component
-func add_comp(comp:Node, replace:bool = false):
+# Instantiates and adds a comp, if replace is true and component is already in entity, replaces existing one with new one
+func add_comp(comp_scene:PackedScene, replace:bool = false):
+	var comp = comp_scene.instantiate()
 	assert(not comp.is_class("GComp"), "Comp has to be GComp to be added here")
 	var refresh:bool = false
 	if replace and compslist.has(comp.name):
@@ -157,6 +158,7 @@ func add_comp(comp:Node, replace:bool = false):
 		refresh = true
 	if refresh:
 		refresh_active_systems()
+	return comp
 
 func remove_comp(compname:String):
 	if compname in compslist:
