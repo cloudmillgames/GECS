@@ -1,0 +1,79 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxfsua7rq3dev"]
+
+[ext_resource type="Script" path="res://scenes/game_over_scene.gd" id="1_hqd3t"]
+
+[node name="GameOverScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_hqd3t")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -104.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="GameOverLbl" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.835294, 0.898039, 0.772549, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 100
+text = "GAME OVER"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="ScoreLbl" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "SCORE 0000"
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="RestartBtn" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(250, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "RESTART"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+
+[node name="ExitBtn" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(250, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.407843, 0.490196, 1)
+theme_override_font_sizes/font_size = 24
+text = "EXIT"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/RestartBtn" to="." method="_on_restart_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ExitBtn" to="." method="_on_exit_btn_pressed"]

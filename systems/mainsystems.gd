@@ -18,6 +18,12 @@ var PSTurretTarget:PackedScene = preload("res://components/turret_target.tscn")
 var PSProjectileImpact:PackedScene = preload("res://entities/projectile_impact.tscn")
 var PSVehicleExplode:PackedScene = preload("res://entities/vehicle_explode.tscn")
 
+func lose_condition(tdelta):
+	var player = get_first_tagged_ent("player")
+	if player == null and not GameSession.gameover:
+		GameSession.gameover = true
+		print("GAME OVER")
+
 func run_escape_quitter(tdelta, ent):
 	if Input.is_action_just_released("ui_cancel"):
 		get_tree().quit()

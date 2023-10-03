@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://8wvs75s87cod"]
+[gd_scene load_steps=11 format=3 uid="uid://8wvs75s87cod"]
 
+[ext_resource type="Script" path="res://start.gd" id="1_qwvoo"]
 [ext_resource type="PackedScene" uid="uid://d34leke2648fi" path="res://entities/player.tscn" id="1_u3djk"]
 [ext_resource type="PackedScene" uid="uid://dbjnht65xad6h" path="res://entities/enemy_spawner.tscn" id="2_u0udi"]
 [ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="3_bw125"]
@@ -23,6 +24,7 @@ glow_enabled = true
 albedo_color = Color(0.490196, 0.27451, 0.211765, 1)
 
 [node name="start" type="Node3D"]
+script = ExtResource("1_qwvoo")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
