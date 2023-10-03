@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1jfr6qn8v13e"]
+[gd_scene load_steps=8 format=3 uid="uid://d1jfr6qn8v13e"]
 
 [ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="1_0ehi1"]
 [ext_resource type="PackedScene" uid="uid://cagyrcotru3p6" path="res://components/killbounds.tscn" id="2_150j5"]
+[ext_resource type="PackedScene" uid="uid://vp0vkogcttsx" path="res://components/collisionevent.tscn" id="3_q1e2g"]
+[ext_resource type="PackedScene" uid="uid://ccglfj8iqiqct" path="res://components/projectile.tscn" id="5_d0105"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xv6u8"]
 albedo_color = Color(0.0705882, 1, 1, 1)
@@ -19,6 +21,7 @@ size = Vector3(0.2, 0.2, 0.5)
 collision_mask = 2
 gravity_scale = 0.0
 continuous_cd = true
+max_contacts_reported = 1
 contact_monitor = true
 can_sleep = false
 lock_rotation = true
@@ -33,3 +36,7 @@ shape = SubResource("BoxShape3D_r2d01")
 [node name="mainsystems" parent="." instance=ExtResource("1_0ehi1")]
 
 [node name="killbounds" parent="mainsystems" instance=ExtResource("2_150j5")]
+
+[node name="collisionevent" parent="mainsystems" instance=ExtResource("3_q1e2g")]
+
+[node name="projectile" parent="mainsystems" instance=ExtResource("5_d0105")]

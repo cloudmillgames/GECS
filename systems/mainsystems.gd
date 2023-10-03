@@ -10,6 +10,15 @@ func sysinit():
 	define_system(["enemy_spawner"],						"spawn_enemy")
 	define_system(["cmdctrl", "vehicle"],					"vehicle_command_control")
 	define_system(["turret", "turret_trigger"],				"turret_cmdctrl")
+	define_system(["escapequiter"],							"run_escape_quitter")
+	define_system(["health", "killable"],					"health_killable")
+	define_system(["projectile", "collisionevent"],			"projectile_collision")
+
+var PSTurretTarget:PackedScene = preload("res://components/turret_target.tscn")
+
+func run_escape_quitter(tdelta, ent):
+	if Input.is_action_just_released("ui_cancel"):
+		get_tree().quit()
 
 # Shake vehicle to indicate it's a vehicle
 # compslist: vehicle, shake
@@ -83,6 +92,7 @@ func vehicle_direct_control(tdelta, ent):
 	else:
 		ent.velocity.x = move_toward(ent.velocity.x, 0, vehicle.speed)
 		ent.velocity.z = move_toward(ent.velocity.z, 0, vehicle.speed)
+	ent.velocity.y = 0
 	
 	ent.move_and_slide()
 
@@ -95,16 +105,7 @@ func turret_direct_control(tdelta, ent):
 			directctrl.trigger = false
 		turret._timer -= tdelta
 	elif directctrl.trigger:
-		var audio = get_comp("audio")
-		var player = get_comp_node(audio.stream_player)
-		player.stream = audio.sounds[0]
-		player.play()
-		var pr:Node3D = turret.projectile.instantiate()
-		var fm:Marker3D = get_comp_node(turret.fire_marker) as Marker3D
-		pr.transform = fm.global_transform
-		pr.linear_velocity = -turret.speed * pr.transform.basis.z 
-		get_tree().root.add_child(pr)
-		turret._timer = turret.cooldown
+		turret.fire()
 
 # compslist: killbounds
 func kill_bounds(tdelta, ent):
@@ -130,7 +131,7 @@ func spawn_enemy(tdelta, ent):
 		enemy.position = pos_start
 		get_parent().get_parent().add_child(enemy)
 		
-		var cmd = get_ent_comp(enemy, "cmdctrl")
+		var cmd = ent_get_comp(enemy, "cmdctrl")
 		var chance = randf()
 		if chance <= es.chance_attack or true:
 			var halfway = pos_end - pos_start
@@ -138,7 +139,7 @@ func spawn_enemy(tdelta, ent):
 			halfway = pos_start + (halfway.normalized() * halfway.length() * alpha)
 			cmd.queue_moveto(halfway)
 			cmd.queue_halt(0.5)
-			cmd.queue_fire()
+			cmd.queue_fire("player")
 		cmd.queue_moveto(pos_end)
 		cmd.queue_destruct()
 		
@@ -179,13 +180,47 @@ func vehicle_command_control(tdelta, ent):
 					cc._current_cmd = cc.CMD_TYPE.NONE
 				cc.CMD_TYPE.FIRE:
 					if has_comp("turret"):
-						add_comp("turret_trigger")
+						add_tag_comp("turret_trigger")
+						if not cc._current_data.is_empty():
+							var tgt = get_first_tagged_ent(cc._current_data)
+							var tt = PSTurretTarget.instantiate()
+							tt.target = tgt
+							add_comp(tt)
 					cc._current_cmd = cc.CMD_TYPE.NONE
 				cc.CMD_TYPE.DESTRUCT:
 					destruct()
 					cc._current_cmd = cc.CMD_TYPE.NONE
 
-# TODO: when turret_trigger tag is added, we fire and then remove turret_trigger
-# compslist: turret, turret_trigger
+# compslist: turret, turret_trigger (optional: turret_target)
 func turret_cmdctrl(tdelta, ent):
-	pass
+	var turret = get_comp("turret")
+	if turret._timer > 0:
+		turret._timer -= tdelta
+	else:
+		var tgt = null
+		if has_comp("turret_target"):
+			var tt = get_comp("turret_target")
+			tgt = tt.target
+			remove_comp("turret_target")
+		turret.fire(tgt)
+		remove_comp("turret_trigger")
+		
+# compslist: health, killable
+func health_killable(tdelta, ent):
+	var health = get_comp("health")
+	if health.hp <= 0:
+		destruct()
+
+# compslist: projectile, collisionevent
+func projectile_collision(tdelta, ent):
+	var collisionevent = get_comp("collisionevent")
+	if collisionevent.collided:
+		var other = collisionevent.with
+		if ent_has_comp(other, "health"):
+			var health = ent_get_comp(other, "health")
+			var proj = get_comp("projectile")
+			health.hp -= proj.damage
+		else:
+			print("projectile_collision (mainsystems): killed `%s` cause it has no health comp" % other.name)
+			destroy(other)
+		destruct()

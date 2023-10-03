@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://hwet0n70x5fr"]
+[gd_scene load_steps=2 format=3 uid="uid://hwet0n70x5fr"]
+
+[ext_resource type="Script" path="res://components/audio.gd" id="1_xj8f6"]
 
 [node name="audio" type="Node"]
+script = ExtResource("1_xj8f6")

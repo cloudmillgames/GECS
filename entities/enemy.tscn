@@ -1,10 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://dq3pq7r4vlcq2"]
+[gd_scene load_steps=13 format=3 uid="uid://dq3pq7r4vlcq2"]
 
 [ext_resource type="PackedScene" uid="uid://dh7ly7j5rge8q" path="res://components/cmdctrl.tscn" id="2_kmacl"]
 [ext_resource type="PackedScene" uid="uid://brcr78rxt5axk" path="res://components/vehicle.tscn" id="4_iqgie"]
+[ext_resource type="PackedScene" uid="uid://byxg8je7to06r" path="res://entities/enemy_projectile.tscn" id="5_eo2ig"]
 [ext_resource type="PackedScene" uid="uid://cagyrcotru3p6" path="res://components/killbounds.tscn" id="5_t2g5e"]
 [ext_resource type="PackedScene" uid="uid://c5ckeou58qnb1" path="res://components/turret.tscn" id="6_ry03l"]
+[ext_resource type="PackedScene" uid="uid://hwet0n70x5fr" path="res://components/audio.tscn" id="6_yv6fi"]
 [ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="7_kaqfd"]
+[ext_resource type="PackedScene" uid="uid://0l66iktpta50" path="res://components/health.tscn" id="8_aukd2"]
+[ext_resource type="PackedScene" uid="uid://bekavm00dsuqv" path="res://components/killable.tscn" id="10_0rcmg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glio0"]
 albedo_color = Color(0, 0.305882, 1, 1)
@@ -16,6 +20,7 @@ material = SubResource("StandardMaterial3D_glio0")
 radius = 0.6
 
 [node name="enemy" type="CharacterBody3D"]
+collision_layer = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -25,6 +30,11 @@ mesh = SubResource("SphereMesh_m6ijd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_b32iv")
 
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
 [node name="mainsystems" parent="." instance=ExtResource("7_kaqfd")]
 
 [node name="cmdctrl" parent="mainsystems" instance=ExtResource("2_kmacl")]
@@ -32,5 +42,15 @@ shape = SubResource("SphereShape3D_b32iv")
 [node name="vehicle" parent="mainsystems" instance=ExtResource("4_iqgie")]
 
 [node name="turret" parent="mainsystems" instance=ExtResource("6_ry03l")]
+fire_marker = NodePath("../../Marker3D")
+projectile = ExtResource("5_eo2ig")
+speed = 75.0
 
 [node name="killbounds" parent="mainsystems" instance=ExtResource("5_t2g5e")]
+
+[node name="audio" parent="mainsystems" instance=ExtResource("6_yv6fi")]
+stream_player = NodePath("../../AudioStreamPlayer3D")
+
+[node name="health" parent="mainsystems" instance=ExtResource("8_aukd2")]
+
+[node name="killable" parent="mainsystems" instance=ExtResource("10_0rcmg")]

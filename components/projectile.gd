@@ -1,8 +1,8 @@
 extends GComp
 
-@export var stream_player:NodePath
+@export var damage:int = 35
 
 func compinit():
-	compname = "audio"
+	compname = "projectile"
 	# expected enttype for error checking (optional)
-	enttype = ""
+	enttype = "PhysicsBody3D"

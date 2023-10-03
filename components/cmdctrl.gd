@@ -32,8 +32,9 @@ func queue_moveto(pos:Vector3):
 func queue_halt(time:float):
 	queue_command(CMD_TYPE.HALT, time)
 
-func queue_fire():
-	queue_command(CMD_TYPE.FIRE)
+# Can fire at a specific group, it'll grab first entity it finds in target_group and shoot at it
+func queue_fire(target_group:String = ""):
+	queue_command(CMD_TYPE.FIRE, target_group)
 
 func queue_destruct():
 	queue_command(CMD_TYPE.DESTRUCT)

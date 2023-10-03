@@ -1,8 +1,9 @@
 extends GComp
 
-@export var stream_player:NodePath
+# If entity has health component, this tag means it'll die on hp = 0
 
 func compinit():
-	compname = "audio"
+	compname = "killable"
 	# expected enttype for error checking (optional)
 	enttype = ""
+

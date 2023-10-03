@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://vp0vkogcttsx"]
+
+[ext_resource type="Script" path="res://components/collisionevent.gd" id="1_v7tf7"]
+
+[node name="collisionevent" type="Node"]
+script = ExtResource("1_v7tf7")

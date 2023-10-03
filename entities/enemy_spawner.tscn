@@ -23,4 +23,4 @@ spawn_follow_path = NodePath("../../Path3D/PathFollow3D")
 curve = SubResource("Curve3D_1oc4x")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 10)

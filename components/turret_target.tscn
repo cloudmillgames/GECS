@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://4nvmi5hi8dmy"]
+
+[ext_resource type="Script" path="res://components/turret_target.gd" id="1_5onge"]
+
+[node name="turret_target" type="Node"]
+script = ExtResource("1_5onge")

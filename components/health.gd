@@ -1,8 +1,8 @@
 extends GComp
 
-@export var stream_player:NodePath
+@export var hp:int = 100
 
 func compinit():
-	compname = "audio"
+	compname = "health"
 	# expected enttype for error checking (optional)
 	enttype = ""

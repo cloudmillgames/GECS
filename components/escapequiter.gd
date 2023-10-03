@@ -1,8 +1,7 @@
 extends GComp
 
-@export var stream_player:NodePath
-
 func compinit():
-	compname = "audio"
+	compname = "escapequiter"
 	# expected enttype for error checking (optional)
 	enttype = ""
+

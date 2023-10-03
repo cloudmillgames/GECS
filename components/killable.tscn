@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bekavm00dsuqv"]
+
+[ext_resource type="Script" path="res://entities/killable.gd" id="1_22h67"]
+
+[node name="killable" type="Node"]
+script = ExtResource("1_22h67")

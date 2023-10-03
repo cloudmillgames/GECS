@@ -19,6 +19,10 @@ class_name GSystems
 # Future work:
 # Would be great if I can annotate systems with their compslist like this: @gsystem("vehicle", "vehicle_shake")
 
+const GPREFIX = "G_"
+# all GECS entities are added to this group
+const ENTGROUP = "_Gent"
+
 # system_name = [compslist]
 var gsystems:Dictionary = {}
 # system names that are active and should be called cause their compslist are all available
@@ -31,6 +35,7 @@ func _ready():
 	var ent = get_parent()
 	assert(ent != get_tree().root)
 
+	ent.add_to_group(ENTGROUP)
 	scan_comps()
 
 	if len(compslist) == 0:
@@ -47,7 +52,7 @@ func scan_comps():
 	for c in get_children():
 		if c is GComp:
 			if c.compname == "unnamed":
-				c.compinit()
+				c.compinit(ent)
 			if c.compname == "unnamed":
 				assert(false, name + "(GSystems): wow this child " + c.name + " is unnamed, what's wrong with you? func compname(): compname=\"snowflake\": " + ent.name)
 				bad_children += 1
@@ -68,11 +73,15 @@ func scan_comps():
 		
 	if bad_children > 0:
 		push_error(name + "(GSystems): " + str(bad_children) + " <- this many children are bad, such parenting: " + ent.name)
+	
+	# Tagging (group names)
+	for n in compslist:
+		ent.add_to_group(GPREFIX + n)
 
 func refresh_active_systems():
 	active_gsystems = []
 	for sysname in gsystems:
-		if is_system_active(gsystems[sysname]):
+		if is_system_active(sysname):
 			active_gsystems.append(sysname)
 
 func is_system_active(sysname:String):
@@ -105,20 +114,56 @@ func _physics_process(delta):
 	for asys in active_gsystems:
 		call(asys, delta, ent)
 
+# components don't need to know which one is entity scene node
+func get_ent():
+	return get_parent()
+
 # Gets component in this entity
 func get_comp(compname:String):
 	return get_node(compname)
 
 # Gets component in given entity from the same systems scene (by name)
-func get_ent_comp(ent:Node, compname:String):
+func ent_get_comp(ent:Node, compname:String)->Node:
+	assert(ent_has_comp(ent, compname), "ent_get_comp (GSystems): entity `" + ent.name + "` doesn't have component `" + compname + "`, typo-o-maybe?")
 	return ent.get_node(NodePath(name)).get_node(compname)
+
+func ent_has_comp(ent:Node, compname:String)->bool:
+	return ent.get_node(NodePath(name)).has_comp(compname)
 
 func has_comp(compname:String):
 	return compname in compslist
 
 # Tag comps are supported, but remember we have to refresh active systems after
-func add_comp(compname:String):
-	compslist.append(compname)
+func add_tag_comp(compname:String):
+	if not compslist.has(compname):
+		compslist.append(compname)
+		var ent = get_parent()
+		ent.add_to_group(GPREFIX + compname)
+		refresh_active_systems()
+
+# Adds an instanced component, if replace is true and component is already in entity, replaces existing component
+func add_comp(comp:Node, replace:bool = false):
+	assert(not comp.is_class("GComp"), "Comp has to be GComp to be added here")
+	var refresh:bool = false
+	if replace and compslist.has(comp.name):
+		remove_child(get_comp(comp.name))
+		compslist.erase(comp.name)
+		refresh = true
+	if not compslist.has(comp.name):
+		compslist.append(comp.name)
+		add_child(comp)
+		var ent = get_parent()
+		ent.add_to_group(GPREFIX + comp.name)
+		refresh = true
+	if refresh:
+		refresh_active_systems()
+
+func remove_comp(compname:String):
+	if compname in compslist:
+		compslist.erase(compname)
+		refresh_active_systems()
+		var ent = get_parent()
+		ent.remove_from_group(GPREFIX + compname)
 
 # Use this from system funcs instead of get_node(), it corrects relative paths to be one up instead of two up
 func get_comp_node(path:NodePath):
@@ -132,3 +177,10 @@ func get_comp_node(path:NodePath):
 # Destroys entity scene effectively removing self
 func destruct():
 	get_parent().queue_free()
+
+# Destroys an entity scene
+func destroy(ent:Node):
+	ent.queue_free()
+
+func get_first_tagged_ent(compname:String):
+	return get_tree().get_first_node_in_group(GPREFIX + compname)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d34leke2648fi"]
+[gd_scene load_steps=17 format=3 uid="uid://d34leke2648fi"]
 
 [ext_resource type="AudioStream" uid="uid://c5koofamxtjlh" path="res://assets/sfx/slow_shoot.wav" id="1_6p6qq"]
 [ext_resource type="PackedScene" uid="uid://jiqij8g7srbd" path="res://components/player.tscn" id="2_crp3g"]
@@ -9,9 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://c5ckeou58qnb1" path="res://components/turret.tscn" id="6_frqv0"]
 [ext_resource type="PackedScene" uid="uid://d1jfr6qn8v13e" path="res://entities/player_projectile.tscn" id="7_a6r40"]
 [ext_resource type="PackedScene" uid="uid://hwet0n70x5fr" path="res://components/audio.tscn" id="8_5qwo8"]
-[ext_resource type="Script" path="res://components/audio.gd" id="9_re764"]
 [ext_resource type="PackedScene" uid="uid://ladvkoejc4gv" path="res://components/movebounds.tscn" id="11_yp7ak"]
 [ext_resource type="Script" path="res://components/movebounds.gd" id="12_40y2m"]
+[ext_resource type="PackedScene" uid="uid://0l66iktpta50" path="res://components/health.tscn" id="12_va03i"]
+[ext_resource type="PackedScene" uid="uid://bekavm00dsuqv" path="res://components/killable.tscn" id="13_prf5d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uvk5o"]
 
@@ -21,6 +22,7 @@ size = Vector3(0.9, 0.3, 0.9)
 [sub_resource type="BoxShape3D" id="BoxShape3D_iedkv"]
 
 [node name="Player" type="CharacterBody3D"]
+collision_mask = 2
 
 [node name="Cube" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -43,6 +45,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
 [node name="mainsystems" parent="." instance=ExtResource("6_7cb53")]
 
 [node name="player" parent="mainsystems" instance=ExtResource("2_crp3g")]
+script = null
 
 [node name="playercontrol" parent="mainsystems" instance=ExtResource("3_ijc62")]
 
@@ -54,12 +57,15 @@ apply_color_to = NodePath("../../Cube")
 [node name="turret" parent="mainsystems" instance=ExtResource("6_frqv0")]
 fire_marker = NodePath("../../Marker3D")
 projectile = ExtResource("7_a6r40")
+sound = ExtResource("1_6p6qq")
 
 [node name="audio" parent="mainsystems" instance=ExtResource("8_5qwo8")]
-script = ExtResource("9_re764")
 stream_player = NodePath("../../AudioStreamPlayer3D")
-sounds = Array[AudioStream]([ExtResource("1_6p6qq")])
 
 [node name="movebounds" parent="mainsystems" instance=ExtResource("11_yp7ak")]
 script = ExtResource("12_40y2m")
 bounds = AABB(-8, -4, -4, 16, 8, 8)
+
+[node name="health" parent="mainsystems" instance=ExtResource("12_va03i")]
+
+[node name="killable" parent="mainsystems" instance=ExtResource("13_prf5d")]

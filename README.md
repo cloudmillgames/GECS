@@ -55,6 +55,26 @@ Suggested file structure should reflect ECS:
 		- mainsystems.gd
 		- mainsystems.tscn
 
+## How about Godot events like collision?
+
+You setup signal listener inside components by overriding and implementing `func post_compinit(ent)`, given entity scene node you can now setup signal listeners to call a local function in component.
+
+Example for collision:
+
+```py
+# Make sure that the parent PhysicsBody3D collider has `Contact Monitoring` ON and `Max Contacts` >= 1, otherwise collision won't work
+var collision:bool = false
+var with:Node3D = null
+
+func post_compinit(ent):
+	ent.body_entered.connect(on_body_entered)
+
+# Note that this doesn't clear the collision flag but leaves that to whoever processes the event (which not ideal)
+func on_body_entered(body:Node):
+	collision = true
+	with = body
+```
+
 
 ## Inside Systems
 

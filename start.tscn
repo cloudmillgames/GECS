@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://8wvs75s87cod"]
+[gd_scene load_steps=10 format=3 uid="uid://8wvs75s87cod"]
 
 [ext_resource type="PackedScene" uid="uid://d34leke2648fi" path="res://entities/player.tscn" id="1_u3djk"]
 [ext_resource type="PackedScene" uid="uid://dbjnht65xad6h" path="res://entities/enemy_spawner.tscn" id="2_u0udi"]
+[ext_resource type="PackedScene" uid="uid://c134qdnl18xb6" path="res://systems/mainsystems.tscn" id="3_bw125"]
+[ext_resource type="PackedScene" uid="uid://3an3d0qrgo2n" path="res://components/escapequiter.tscn" id="4_sik21"]
+[ext_resource type="Script" path="res://components/escapequiter.gd" id="5_10x4j"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kbjq8"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -40,3 +43,8 @@ material = SubResource("StandardMaterial3D_5ui1g")
 [node name="Player" parent="." instance=ExtResource("1_u3djk")]
 
 [node name="EnemySpawner" parent="." instance=ExtResource("2_u0udi")]
+
+[node name="mainsystems" parent="." instance=ExtResource("3_bw125")]
+
+[node name="escapequiter" parent="mainsystems" instance=ExtResource("4_sik21")]
+script = ExtResource("5_10x4j")

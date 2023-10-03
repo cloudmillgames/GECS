@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5ckeou58qnb1"]
+[gd_scene load_steps=3 format=3 uid="uid://c5ckeou58qnb1"]
 
 [ext_resource type="Script" path="res://components/turret.gd" id="1_d62fg"]
+[ext_resource type="AudioStream" uid="uid://drexhb5s0wck0" path="res://assets/sfx/shoot.wav" id="3_e8hpi"]
 
 [node name="turret" type="Node"]
 script = ExtResource("1_d62fg")
+sound = ExtResource("3_e8hpi")
