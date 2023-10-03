@@ -13,6 +13,7 @@ func sysinit():
 	define_system(["escapequiter"],							"run_escape_quitter")
 	define_system(["health", "killable"],					"health_killable")
 	define_system(["projectile", "collisionevent"],			"projectile_collision")
+	define_singleton_system("lose_condition")
 
 var PSTurretTarget:PackedScene = preload("res://components/turret_target.tscn")
 var PSProjectileImpact:PackedScene = preload("res://entities/projectile_impact.tscn")

@@ -19,13 +19,7 @@ class_name GSystems
 # Future work:
 # Would be great if I can annotate systems with their compslist like this: @gsystem("vehicle", "vehicle_shake")
 
-const GPREFIX = "G_"
-# all GECS entities are added to this group
-const ENTGROUP = "_Gent"
-
-# system_name = [compslist]
-var gsystems:Dictionary = {}
-# system names that are active and should be called cause their compslist are all available
+# which systems are active (this entity has required comps signature)
 var active_gsystems:Array[String] = []
 # list of comps names found
 var compslist:Array[String] = []
@@ -34,14 +28,20 @@ func _ready():
 	# Make sure there's a comps node up there
 	var ent = get_parent()
 	assert(ent != get_tree().root)
-
-	ent.add_to_group(ENTGROUP)
+	
+	ent.add_to_group(GECS.GENTGROUP)
 	scan_comps()
-
+	
+	GECS.register_gsystems(self)
 	if len(compslist) == 0:
-		push_warning("GSystems " + name + " didn't find any components in comps, so it'll do nothing: " + ent.name)
-	else:
-		sysinit()
+		print("GSystems " + name + " didn't find any components in comps, so it'll do nothing: " + ent.name)
+	
+	tree_exiting.connect(on_tree_exiting)
+	if len(active_gsystems) == 0:
+		refresh_active_systems()
+
+func on_tree_exiting():
+	GECS.deregister_gsystems(self)
 
 func scan_comps():
 	# Sniff all defined components, complain about non-components in children
@@ -76,16 +76,16 @@ func scan_comps():
 	
 	# Tagging (group names)
 	for n in compslist:
-		ent.add_to_group(GPREFIX + n)
+		ent.add_to_group(GECS.GPREFIX + n)
 
 func refresh_active_systems():
 	active_gsystems = []
-	for sysname in gsystems:
+	for sysname in GECS.get_defined_systems():
 		if is_system_active(sysname):
 			active_gsystems.append(sysname)
 
 func is_system_active(sysname:String):
-	var compnames = gsystems[sysname]
+	var compnames = GECS.get_system_comps(sysname)
 	var active = true
 	for c in compnames:
 		if not compslist.has(c):
@@ -93,21 +93,25 @@ func is_system_active(sysname:String):
 			break
 	return active
 
-# Where define_system() should be called by systems
+# Where to put the define_system() calls. This func is called by GECS
 func sysinit():
 	pass
 
 # Define a system as: array of component names (compnames) and system function name (sysname)
-func define_system(compnames, sysname):
-	var ent = get_parent()
-	if sysname in gsystems:
-		assert(false,  name + "(GSystems): define_system() given a sysname `" + sysname + "` that's already defined, what's r we doin here? " + ent.name)
-	elif len(compnames) == 0:
-		assert(false,  name + "(GSystems): define_system() for `" + sysname + "` given compslist empty.. hollow.. void.." + ent.name)
+func define_system(compnames:Array[String], sysname:String):
+	GECS.define_system(self, compnames, sysname)
+	var o = "System `" + sysname  + "` defined: "
+	for n in compnames:
+		o += str(n) + " "
+	if is_system_active(sysname):
+		active_gsystems.append(sysname)
+		o += "(ACTIVE)"
 	else:
-		gsystems[sysname] = compnames
-		if is_system_active(sysname):
-			active_gsystems.append(sysname)
+		o += "(INACTIVE)"
+	print(o)
+
+func define_singleton_system(sysname:String):
+	GECS.define_singleton_system(sysname)
 
 func _physics_process(delta):
 	var ent = get_parent()
@@ -138,7 +142,7 @@ func add_tag_comp(compname:String):
 	if not compslist.has(compname):
 		compslist.append(compname)
 		var ent = get_parent()
-		ent.add_to_group(GPREFIX + compname)
+		ent.add_to_group(GECS.GPREFIX + compname)
 		refresh_active_systems()
 
 # Instantiates and adds a comp, if replace is true and component is already in entity, replaces existing one with new one
@@ -154,7 +158,7 @@ func add_comp(comp_scene:PackedScene, replace:bool = false):
 		compslist.append(comp.name)
 		add_child(comp)
 		var ent = get_parent()
-		ent.add_to_group(GPREFIX + comp.name)
+		ent.add_to_group(GECS.GPREFIX + comp.name)
 		refresh = true
 	if refresh:
 		refresh_active_systems()
@@ -165,7 +169,7 @@ func remove_comp(compname:String):
 		compslist.erase(compname)
 		refresh_active_systems()
 		var ent = get_parent()
-		ent.remove_from_group(GPREFIX + compname)
+		ent.remove_from_group(GECS.GPREFIX + compname)
 
 # Use this from system funcs instead of get_node(), it corrects relative paths to be one up instead of two up
 func get_comp_node(path:NodePath):
@@ -185,4 +189,4 @@ func destroy(ent:Node):
 	ent.queue_free()
 
 func get_first_tagged_ent(compname:String):
-	return get_tree().get_first_node_in_group(GPREFIX + compname)
+	return get_tree().get_first_node_in_group(GECS.GPREFIX + compname)
