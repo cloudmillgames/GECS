@@ -1,7 +1,7 @@
 extends GSystems
 
 func sysinit():
-	define_system(["vehicle", "shake"], 					"vehicle_shake")
+	define_system(["shake"], 								"thing_shake")
 	define_system(["vehicle"], 								"vehicle_tint")
 	define_system(["playercontrol", "directctrl"], 			"player_controls")
 	define_system(["directctrl", "vehicle", "movebounds"], 	"vehicle_direct_control")
@@ -15,16 +15,17 @@ func sysinit():
 	define_system(["projectile", "collisionevent"],			"projectile_collision")
 
 var PSTurretTarget:PackedScene = preload("res://components/turret_target.tscn")
+var PSProjectileImpact:PackedScene = preload("res://entities/projectile_impact.tscn")
+var PSVehicleExplode:PackedScene = preload("res://entities/vehicle_explode.tscn")
 
 func run_escape_quitter(tdelta, ent):
 	if Input.is_action_just_released("ui_cancel"):
 		get_tree().quit()
 
-# Shake vehicle to indicate it's a vehicle
-# compslist: vehicle, shake
-func vehicle_shake(tdelta, ent):
-	# Shake the cube
-	var shake = get_comp("comps/shake")
+# Shake thing
+# compslist: shake
+func thing_shake(tdelta, ent):
+	var shake = get_comp("shake")
 	if shake.what:
 		var r = [randf() * shake.strength, randf() * shake.strength, randf() * shake.strength]
 		var what:Node3D = get_node(shake.what) as Node3D
@@ -208,6 +209,10 @@ func turret_cmdctrl(tdelta, ent):
 func health_killable(tdelta, ent):
 	var health = get_comp("health")
 	if health.hp <= 0:
+		if has_comp("vehicle"):
+			var ve = PSVehicleExplode.instantiate()
+			ve.position = ent.global_position
+			get_tree().root.add_child(ve)
 		destruct()
 
 # compslist: projectile, collisionevent
@@ -222,4 +227,8 @@ func projectile_collision(tdelta, ent):
 		else:
 			print("projectile_collision (mainsystems): killed `%s` cause it has no health comp" % other.name)
 			destroy(other)
+		# impact effect
+		var projimp = PSProjectileImpact.instantiate()
+		projimp.position = ent.global_position
+		get_tree().root.add_child(projimp)
 		destruct()
