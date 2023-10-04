@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://pi1cf21nq7n1"]
+
+[ext_resource type="Script" path="res://godway/godway_enemy_spawner.gd" id="1_byrfa"]
+
+[sub_resource type="Curve3D" id="Curve3D_jkgs5"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 15, 0, 10, 0, 0, 0, 0, 0, 0, 15, 0, -10, 0, 0, 0, 0, 0, 0, -15, 0, -10, 0, 0, 0, 0, 0, 0, -15, 0, 10, 0, 0, 0, 0, 0, 0, 15, 0, 10),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="GodwayEnemySpawner" type="Node3D" node_paths=PackedStringArray("spawn_follow_path")]
+script = ExtResource("1_byrfa")
+spawn_follow_path = NodePath("Path3D/PathFollow3D")
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_jkgs5")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 10)

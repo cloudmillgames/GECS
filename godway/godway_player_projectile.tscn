@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://n0klywlipb86"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xv6u8"]
+albedo_color = Color(0.0705882, 1, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.686275, 0.803922, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xolah"]
+material = SubResource("StandardMaterial3D_xv6u8")
+size = Vector3(0.2, 0.2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_00yub"]
+size = Vector3(0.2, 0.2, 0.5)
+
+[node name="godway_player_projectile" type="RigidBody3D"]
+linear_velocity = Vector3(0, 0, -100)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_xolah")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_00yub")

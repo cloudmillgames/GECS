@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvsfvsbkp1cj3"]
+
+[ext_resource type="Script" path="res://godway/godway_turret.gd" id="1_yywl6"]
+[ext_resource type="AudioStream" uid="uid://drexhb5s0wck0" path="res://assets/sfx/shoot.wav" id="2_pclbl"]
+
+[node name="godway_turret" type="Node3D"]
+script = ExtResource("1_yywl6")
+sound = ExtResource("2_pclbl")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]

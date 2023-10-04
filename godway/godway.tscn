@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://bamcqm1c0kjo1"]
+
+[ext_resource type="PackedScene" uid="uid://d4brnj8k8momd" path="res://godway/godway_player.tscn" id="1_k1o6m"]
+[ext_resource type="PackedScene" uid="uid://pi1cf21nq7n1" path="res://godway/godway_enemy_spawner.tscn" id="2_japrm"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mw4vk"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_1quil"]
+sky_material = SubResource("ProceduralSkyMaterial_mw4vk")
+
+[sub_resource type="Environment" id="Environment_v6eri"]
+background_mode = 2
+sky = SubResource("Sky_1quil")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4gdgd"]
+albedo_color = Color(0.490196, 0.27451, 0.211765, 1)
+
+[node name="godway-start" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 8.77958, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_v6eri")
+
+[node name="Ground" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_4gdgd")
+
+[node name="Player" parent="." instance=ExtResource("1_k1o6m")]
+
+[node name="GodwayEnemySpawner" parent="." instance=ExtResource("2_japrm")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ScoreLbl" type="Label" parent="CanvasLayer"]
+custom_minimum_size = Vector2(100, 0)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -51.0
+offset_bottom = 26.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 12
+text = "SCORE 0000"
+horizontal_alignment = 2

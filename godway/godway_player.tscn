@@ -1,0 +1,38 @@
+[gd_scene load_steps=8 format=3 uid="uid://d4brnj8k8momd"]
+
+[ext_resource type="Script" path="res://godway/godway_player.gd" id="1_2b86v"]
+[ext_resource type="AudioStream" uid="uid://c5koofamxtjlh" path="res://assets/sfx/slow_shoot.wav" id="2_mayye"]
+[ext_resource type="PackedScene" uid="uid://cvsfvsbkp1cj3" path="res://godway/godway_turret.tscn" id="3_0enep"]
+[ext_resource type="PackedScene" uid="uid://n0klywlipb86" path="res://godway/godway_player_projectile.tscn" id="4_xchce"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pwfco"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_qwlmt"]
+size = Vector3(0.9, 0.3, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jwvrn"]
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+script = ExtResource("1_2b86v")
+
+[node name="Cube" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+material = SubResource("StandardMaterial3D_pwfco")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.653264)
+mesh = SubResource("PrismMesh_qwlmt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_jwvrn")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_mayye")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
+
+[node name="turret" parent="." instance=ExtResource("3_0enep")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.7)
+projectile = ExtResource("4_xchce")

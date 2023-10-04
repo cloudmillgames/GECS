@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3oaowu72lsaa"]
+
+[ext_resource type="Script" path="res://godway/godway_vehicle.gd" id="1_hmwke"]
+
+[node name="godway_vehicle" type="CharacterBody3D"]
+script = ExtResource("1_hmwke")
