@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmh166ct7ogc"]
+
+[ext_resource type="Script" path="res://components/replicatestring.gd" id="1_fojb8"]
+
+[node name="replicatestring" type="Node"]
+script = ExtResource("1_fojb8")

@@ -64,7 +64,7 @@ stream_player = NodePath("../../AudioStreamPlayer3D")
 
 [node name="movebounds" parent="mainsystems" instance=ExtResource("11_yp7ak")]
 script = ExtResource("12_40y2m")
-bounds = AABB(-8, -4, -4, 16, 8, 8)
+bounds = AABB(-10, -4, -6.5, 20, 8, 13)
 
 [node name="health" parent="mainsystems" instance=ExtResource("12_va03i")]
 

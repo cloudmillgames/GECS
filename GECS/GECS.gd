@@ -75,6 +75,7 @@ func _physics_process(delta):
 
 func change_scene_to(scene_file:String):
 	get_tree().change_scene_to_file(scene_file)
+	clear_all()
 
 # Spawns a Node3D entity in root then adds given component to it
 # - gsystems_path is the path to tscn of the gsystems to use, this is required to avoid cyclic dependency
@@ -88,3 +89,10 @@ func spawn_ent_comp(gsystems_path:String, comp:GComp)->Node3D:
 	ent.add_child(gsys)
 	get_tree().root.add_child(ent)
 	return ent
+
+# Call when scene is unloaded and you don't want any data left over
+func clear_all():
+	gsysname = ""
+	gsystems = {}
+	single_systems = []
+	instances = []
