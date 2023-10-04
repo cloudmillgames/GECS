@@ -1,0 +1,77 @@
+[gd_scene load_steps=2 format=3 uid="uid://cy67d0d2j3f5t"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_jygrd"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jygrd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -104.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="GECSLbl" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.835294, 0.898039, 0.772549, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 100
+text = "GECS"
+
+[node name="GECS_Subtitle_lbl" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 20
+text = "Experiments in Godot and ECS"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="GECSBtn" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(250, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "GECS
+Godot-crude-ECS"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+
+[node name="GodwayBtn" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(250, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Godway
+Godot-way"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/GECSBtn" to="." method="_on_gecs_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/GodwayBtn" to="." method="_on_godway_btn_pressed"]
